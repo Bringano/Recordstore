@@ -20,27 +20,27 @@ public class OrderService {
         return orderRepository.save(new Order(customerId));
     }
 
-    public Order addLine(Long orderId, OrderLine line) {
-        Order order = getOrder(orderId);
+    public Order addLine(String orderNumber, OrderLine line) {
+        Order order = getByOrderNumber(orderNumber);
         order.addLine(line);
         return orderRepository.save(order);
     }
 
-    public Order confirm(Long orderId) {
-        Order order = getOrder(orderId);
+    public Order confirm(String orderNumber) {
+        Order order = getByOrderNumber(orderNumber);
         order.confirm();
         return orderRepository.save(order);
     }
 
-    public Order cancel(Long orderId) {
-        Order order = getOrder(orderId);
+    public Order cancel(String orderNumber) {
+        Order order = getByOrderNumber(orderNumber);
         order.cancel();
         return orderRepository.save(order);
     }
 
-    public Order getOrder(Long orderId) {
-        return orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderNotFoundException("Order " + orderId + " not found"));
+    public Order getByOrderNumber(String orderNumber) {
+        return orderRepository.findByOrderNumber(orderNumber)
+                .orElseThrow(() -> new OrderNotFoundException("Order " + orderNumber + " not found"));
     }
 
     public List<Order> getOrdersByCustomer(Long customerId) {

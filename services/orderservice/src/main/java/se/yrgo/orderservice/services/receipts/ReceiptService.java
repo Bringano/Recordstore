@@ -49,7 +49,7 @@ public class ReceiptService {
         return receipt;
     }
 
-    public Receipt getReceiptByOrderId(String orderNumber) {
+    public Receipt getReceiptByOrderNumber(String orderNumber) {
         return receiptRepository.findByOrderNumber(orderNumber)
                 .orElseThrow(() -> new ReceiptNotFoundException("No receipt for order " + orderNumber));
     }
