@@ -1,4 +1,4 @@
-package se.yrgo.orderservice.domain.reciepts;
+package se.yrgo.orderservice.domain.receipts;
 
 import java.math.*;
 

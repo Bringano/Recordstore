@@ -1,4 +1,4 @@
-package se.yrgo.orderservice.domain.reciepts;
+package se.yrgo.orderservice.domain.receipts;
 
 import java.math.*;
 import java.time.*;
@@ -8,14 +8,14 @@ import jakarta.persistence.*;
 import se.yrgo.orderservice.domain.orders.*;
 
 @Entity
-@Table(name = "reciepts")
-public class Reciept {
+@Table(name = "receipts")
+public class Receipt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true, updatable = false)
-    private String recieptNumber;
+    private String receiptNumber;
 
     @OneToOne(optional = false)
     @JoinColumn(name = "order_id", unique = true, updatable = false)
@@ -27,9 +27,6 @@ public class Reciept {
     @Column(updatable = false)
     private Long customerId;
 
-    @Column(updatable = false)
-    private String customerName;
-
     @Column(nullable = false, precision = 12, scale = 2, updatable = false)
     private BigDecimal total;
 
@@ -37,32 +34,33 @@ public class Reciept {
     @JoinColumn(name = "receipt_id")
     private List<ReceiptLine> lines = new ArrayList<>();
 
-    protected Reciept() {
+    protected Receipt() {
     }
 
-    public Reciept(
-            String recieptNumber,
+    public Receipt(
+            String receiptNumber,
             Order order,
-            Instant issuedAt,
             Long customerId,
-            String customerName,
-            BigDecimal total,
-            List<ReceiptLine> lines) {
-        this.recieptNumber = recieptNumber;
+            BigDecimal total) {
+        if (order.getStatus() != OrderStatus.CONFIRMED) {
+            throw new IllegalStateException("The order must be confirmed to create a receipt");
+        }
+        this.receiptNumber = receiptNumber;
         this.order = order;
-        this.issuedAt = issuedAt;
         this.customerId = customerId;
-        this.customerName = customerName;
         this.total = total;
-        this.lines = lines;
+    }
+
+    public void addLine(ReceiptLine newReceiptLine) {
+        lines.add(newReceiptLine);
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getRecieptNumber() {
-        return recieptNumber;
+    public String getReceiptNumber() {
+        return receiptNumber;
     }
 
     public Order getOrder() {
@@ -75,10 +73,6 @@ public class Reciept {
 
     public Long getCustomerId() {
         return customerId;
-    }
-
-    public String getCustomerName() {
-        return customerName;
     }
 
     public BigDecimal getTotal() {
