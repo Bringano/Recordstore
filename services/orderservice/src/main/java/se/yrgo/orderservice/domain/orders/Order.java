@@ -64,6 +64,13 @@ public class Order {
         status = OrderStatus.CONFIRMED;
     }
 
+    public void complete() {
+        if (status != OrderStatus.CONFIRMED) {
+            throw new IllegalStateException("Only a CONFIRMED order can be completed");
+        }
+        status = OrderStatus.COMPLETED;
+    }
+
     public void cancel() {
         if (status == OrderStatus.CANCELLED) {
             throw new IllegalStateException("Order already cancelled");
