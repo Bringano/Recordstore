@@ -11,6 +11,7 @@ import se.yrgo.orderservice.domain.orders.*;
 import se.yrgo.orderservice.domain.receipts.*;
 import se.yrgo.orderservice.repository.*;
 import se.yrgo.orderservice.services.orders.exceptions.*;
+import se.yrgo.orderservice.services.receipts.exceptions.*;
 
 @Service
 public class ReceiptService {
@@ -53,8 +54,9 @@ public class ReceiptService {
         return receipt;
     }
 
-    public Optional<Receipt> getReceiptByOrderId(Long orderId) {
-        return receiptRepository.findByOrderId(orderId);
+    public Receipt getReceiptByOrderId(Long orderId) {
+        return receiptRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new ReceiptNotFoundException("No receipt for order " + orderId));
     }
 
     public List<Receipt> getCustomerReceipts(Long customerId) {
