@@ -72,6 +72,9 @@ public class Order {
     }
 
     public void cancel() {
+        if (status == OrderStatus.COMPLETED) {
+            throw new IllegalStateException("Cannot cancel a completed order");
+        }
         if (status == OrderStatus.CANCELLED) {
             throw new IllegalStateException("Order already cancelled");
         }
