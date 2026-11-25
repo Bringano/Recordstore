@@ -6,6 +6,7 @@ import java.util.*;
 
 import jakarta.persistence.*;
 import se.yrgo.orderservice.domain.orders.*;
+import se.yrgo.orderservice.util.*;
 
 @Entity
 @Table(name = "receipts")
@@ -15,7 +16,7 @@ public class Receipt {
     private Long id;
 
     @Column(nullable = false, unique = true, updatable = false)
-    private String receiptNumber;
+    private String receiptNumber = NumberGenerator.receiptNumber();
 
     @OneToOne(optional = false)
     @JoinColumn(name = "order_id", unique = true, updatable = false)
@@ -38,14 +39,12 @@ public class Receipt {
     }
 
     public Receipt(
-            String receiptNumber,
             Order order,
             Long customerId,
             BigDecimal total) {
         if (order.getStatus() != OrderStatus.CONFIRMED) {
             throw new IllegalStateException("The order must be confirmed to create a receipt");
         }
-        this.receiptNumber = receiptNumber;
         this.order = order;
         this.customerId = customerId;
         this.total = total;

@@ -1,7 +1,5 @@
 package se.yrgo.orderservice.services.receipts;
 
-import java.time.*;
-import java.time.format.*;
 import java.util.*;
 
 import org.springframework.stereotype.*;
@@ -18,24 +16,21 @@ public class ReceiptService {
     private final ReceiptRepository receiptRepository;
     private final OrderRepository orderRepository;
 
-    private static final DateTimeFormatter DATE = DateTimeFormatter.BASIC_ISO_DATE;
-
     public ReceiptService(ReceiptRepository receiptRepository, OrderRepository orderRepository) {
         this.receiptRepository = receiptRepository;
         this.orderRepository = orderRepository;
     }
 
     @Transactional
-    public Receipt createReceipt(Long orderId) {
-        if (receiptRepository.findByOrderId(orderId).isPresent()) {
-            throw new IllegalStateException("Receipt already exists for order " + orderId);
+    public Receipt createReceipt(String orderNumber) {
+        if (receiptRepository.findByOrderNumber(orderNumber).isPresent()) {
+            throw new IllegalStateException("Receipt already exists for order " + orderNumber);
         }
 
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderNotFoundException("Order " + orderId + " not found"));
+        Order order = orderRepository.findByOrderNumber(orderNumber)
+                .orElseThrow(() -> new OrderNotFoundException("Order " + orderNumber + " not found"));
 
         Receipt receipt = new Receipt(
-                generateReceiptNumber(),
                 order,
                 order.getCustomerId(),
                 order.getTotal());
@@ -54,21 +49,12 @@ public class ReceiptService {
         return receipt;
     }
 
-    public Receipt getReceiptByOrderId(Long orderId) {
-        return receiptRepository.findByOrderId(orderId)
-                .orElseThrow(() -> new ReceiptNotFoundException("No receipt for order " + orderId));
+    public Receipt getReceiptByOrderId(String orderNumber) {
+        return receiptRepository.findByOrderNumber(orderNumber)
+                .orElseThrow(() -> new ReceiptNotFoundException("No receipt for order " + orderNumber));
     }
 
     public List<Receipt> getCustomerReceipts(Long customerId) {
         return receiptRepository.findByCustomerId(customerId);
-    }
-
-    public String generateReceiptNumber() {
-        String date = DATE.format(LocalDate.now(ZoneId.systemDefault()));
-        String suffix = UUID.randomUUID()
-                .toString()
-                .substring(0, 8)
-                .toUpperCase();
-        return "RCP-" + date + "-" + suffix;
     }
 }
