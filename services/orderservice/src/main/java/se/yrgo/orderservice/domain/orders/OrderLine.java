@@ -1,4 +1,4 @@
-package se.yrgo.purchaseservice.domain.orders;
+package se.yrgo.orderservice.domain.orders;
 
 import java.math.BigDecimal;
 import java.util.*;

@@ -1,11 +1,11 @@
-package se.yrgo.purchaseservice.domain.reciepts;
+package se.yrgo.orderservice.domain.reciepts;
 
 import java.math.*;
 import java.time.*;
 import java.util.*;
 
 import jakarta.persistence.*;
-import se.yrgo.purchaseservice.domain.orders.*;
+import se.yrgo.orderservice.domain.orders.*;
 
 @Entity
 @Table(name = "reciepts")
