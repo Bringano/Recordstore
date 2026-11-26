@@ -7,9 +7,14 @@ import java.util.List;
 import se.yrgo.orderservice.domain.orders.Order;
 import se.yrgo.orderservice.domain.orders.OrderStatus;
 
-public record OrderResponse(Long id, String orderNumber, Long customerId,
-                Instant createdAt, OrderStatus status,
-                List<OrderLineResponse> lines, BigDecimal total) {
+public record OrderResponse(
+                Long id,
+                String orderNumber,
+                Long customerId,
+                Instant createdAt,
+                OrderStatus status,
+                List<OrderLineResponse> lines,
+                BigDecimal total) {
         public static OrderResponse from(Order order) {
                 List<OrderLineResponse> lines = order.getLines().stream()
                                 .map(OrderLineResponse::from)

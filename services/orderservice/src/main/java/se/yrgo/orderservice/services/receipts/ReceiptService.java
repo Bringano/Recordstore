@@ -16,7 +16,9 @@ public class ReceiptService {
     private final ReceiptRepository receiptRepository;
     private final OrderRepository orderRepository;
 
-    public ReceiptService(ReceiptRepository receiptRepository, OrderRepository orderRepository) {
+    public ReceiptService(
+            ReceiptRepository receiptRepository,
+            OrderRepository orderRepository) {
         this.receiptRepository = receiptRepository;
         this.orderRepository = orderRepository;
     }

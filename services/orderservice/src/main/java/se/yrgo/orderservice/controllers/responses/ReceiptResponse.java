@@ -6,8 +6,13 @@ import java.util.List;
 
 import se.yrgo.orderservice.domain.receipts.Receipt;
 
-public record ReceiptResponse(Long id, String receiptNumber, String orderNumber,
-        Instant issuedAt, Long customerId, BigDecimal total,
+public record ReceiptResponse(
+        Long id,
+        String receiptNumber,
+        String orderNumber,
+        Instant issuedAt,
+        Long customerId,
+        BigDecimal total,
         List<ReceiptLineResponse> lines) {
 
     public static ReceiptResponse from(Receipt receipt) {
