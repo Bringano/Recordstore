@@ -1,5 +1,6 @@
 package se.yrgo.userservice.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import se.yrgo.userservice.domain.Role;
 import se.yrgo.userservice.domain.User;
@@ -16,10 +17,14 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository,
+                       RoleRepository roleRepository,
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User register(String email, String password, String username) throws UserAlreadyExistsException {
@@ -34,7 +39,7 @@ public class UserService {
 
         User user = new User();
         user.setEmail(email);
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
         user.setUsername(username);
         user.setRole(customerRole);
 

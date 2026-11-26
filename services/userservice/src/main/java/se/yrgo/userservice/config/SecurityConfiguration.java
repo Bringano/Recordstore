@@ -42,7 +42,7 @@ public class SecurityConfiguration {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    // Validerar att inkommande JWT-token är signerad med rätt hemlig nyckeö
+    // Validerar att inkommande JWT-token är signerad med rätt hemlig nyckel
     @Bean
     public JwtDecoder jwtDecoder() {
         SecretKeySpec key = new SecretKeySpec(jwtSecret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
