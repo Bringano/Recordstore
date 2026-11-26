@@ -4,6 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import se.yrgo.userservice.domain.Role;
 import se.yrgo.userservice.domain.User;
+import se.yrgo.userservice.exception.InvalidCredentialsException;
 import se.yrgo.userservice.exception.UserAlreadyExistsException;
 import se.yrgo.userservice.exception.UserNotFoundException;
 import se.yrgo.userservice.repository.RoleRepository;
@@ -44,6 +45,20 @@ public class UserService {
         user.setRole(customerRole);
 
         return userRepository.save(user);
+    }
+
+    public User login(String email, String password) throws InvalidCredentialsException {
+        User user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            throw new InvalidCredentialsException();
+        }
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new InvalidCredentialsException();
+        }
+
+        return user;
     }
 
     public List<User> getAllUsers() {
