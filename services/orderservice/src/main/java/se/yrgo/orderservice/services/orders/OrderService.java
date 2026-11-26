@@ -1,23 +1,38 @@
 package se.yrgo.orderservice.services.orders;
 
-import java.util.*;
+import java.util.List;
 
-import org.springframework.stereotype.*;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import se.yrgo.orderservice.domain.orders.*;
-import se.yrgo.orderservice.repository.*;
-import se.yrgo.orderservice.services.orders.exceptions.*;
+import se.yrgo.orderservice.client.ProductClient;
+import se.yrgo.orderservice.client.ProductInfo;
+import se.yrgo.orderservice.controllers.requests.OrderLineRequest;
+import se.yrgo.orderservice.domain.orders.Order;
+import se.yrgo.orderservice.domain.orders.OrderLine;
+import se.yrgo.orderservice.repository.OrderRepository;
+import se.yrgo.orderservice.services.orders.exceptions.OrderNotFoundException;
 
 @Service
 public class OrderService {
     private final OrderRepository orderRepository;
+    private final ProductClient productClient;
 
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(
+            OrderRepository orderRepository,
+            ProductClient productClient) {
         this.orderRepository = orderRepository;
+        this.productClient = productClient;
     }
 
-    public Order createOrder(Long customerId) {
-        return orderRepository.save(new Order(customerId));
+    @Transactional
+    public Order createOrder(Long customerId, List<OrderLineRequest> lines) {
+        Order order = new Order(customerId);
+        for (OrderLineRequest line : lines) {
+            ProductInfo p = productClient.getProduct(line.productId());
+            order.addLine(new OrderLine(p.productId(), p.productName(), line.quantity(), p.price()));
+        }
+        return orderRepository.save(order);
     }
 
     public Order addLine(String orderNumber, OrderLine line) {
