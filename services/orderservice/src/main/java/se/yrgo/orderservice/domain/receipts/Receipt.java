@@ -26,7 +26,7 @@ public class Receipt {
     private Instant issuedAt = Instant.now();
 
     @Column(updatable = false)
-    private Long customerId;
+    private Long userId;
 
     @Column(nullable = false, precision = 12, scale = 2, updatable = false)
     private BigDecimal total;
@@ -40,13 +40,13 @@ public class Receipt {
 
     public Receipt(
             Order order,
-            Long customerId,
+            Long userId,
             BigDecimal total) {
         if (order.getStatus() != OrderStatus.CONFIRMED) {
             throw new IllegalStateException("The order must be confirmed to create a receipt");
         }
         this.order = order;
-        this.customerId = customerId;
+        this.userId = userId;
         this.total = total;
     }
 
@@ -70,8 +70,8 @@ public class Receipt {
         return issuedAt;
     }
 
-    public Long getCustomerId() {
-        return customerId;
+    public Long getUserId() {
+        return userId;
     }
 
     public BigDecimal getTotal() {

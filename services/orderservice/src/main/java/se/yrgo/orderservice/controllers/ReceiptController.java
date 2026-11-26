@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,18 +31,19 @@ public class ReceiptController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ReceiptResponse.from(receipt));
     }
 
-    @GetMapping("/{orderNumber}")
-    public ResponseEntity<ReceiptResponse> getReceipt(@PathVariable String orderNumber) {
-        Receipt receipt = receiptService.getReceiptByOrderNumber(orderNumber);
-        return ResponseEntity.ok(ReceiptResponse.from(receipt));
-    }
-
-    @GetMapping("/customer/{customerId}")
-    public ResponseEntity<List<ReceiptResponse>> getCustomerReceipts(@PathVariable Long customerId) {
-        List<ReceiptResponse> receipts = receiptService.getCustomerReceipts(customerId)
+    @GetMapping("/my")
+    public ResponseEntity<List<ReceiptResponse>> getMyReceipts(@AuthenticationPrincipal Jwt jwt) {
+        Long userId = Long.valueOf(jwt.getSubject());
+        List<ReceiptResponse> receipts = receiptService.getReceiptsByUser(userId)
                 .stream()
                 .map(ReceiptResponse::from)
                 .toList();
         return ResponseEntity.ok(receipts);
+    }
+
+    @GetMapping("/{orderNumber}")
+    public ResponseEntity<ReceiptResponse> getReceipt(@PathVariable String orderNumber) {
+        Receipt receipt = receiptService.getReceiptByOrderNumber(orderNumber);
+        return ResponseEntity.ok(ReceiptResponse.from(receipt));
     }
 }

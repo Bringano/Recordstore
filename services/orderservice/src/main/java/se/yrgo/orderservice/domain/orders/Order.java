@@ -27,8 +27,8 @@ public class Order {
     @Column(nullable = false, unique = true, updatable = false)
     private String orderNumber = NumberGenerator.orderNumber();
 
-    @Column(nullable = false, updatable = false)
-    private Long customerId;
+    @Column(name = "user_id", nullable = false, updatable = false)
+    private Long userId;
 
     @Column(nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
@@ -44,8 +44,8 @@ public class Order {
     protected Order() {
     }
 
-    public Order(Long customerId) {
-        this.customerId = Objects.requireNonNull(customerId);
+    public Order(Long userId) {
+        this.userId = Objects.requireNonNull(userId);
     }
 
     public void addLine(OrderLine newOrderLine) {
@@ -97,8 +97,8 @@ public class Order {
         return orderNumber;
     }
 
-    public Long getCustomerId() {
-        return customerId;
+    public Long getUserId() {
+        return userId;
     }
 
     public Instant getCreatedAt() {

@@ -13,5 +13,5 @@ public interface ReceiptRepository extends JpaRepository<Receipt, Long> {
     @Query("SELECT r FROM Receipt r WHERE r.order.orderNumber = :orderNumber")
     Optional<Receipt> findByOrderNumber(@Param("orderNumber") String orderNumber);
 
-    List<Receipt> findByCustomerId(Long customerId);
+    List<Receipt> findByUserId(Long userId);
 }

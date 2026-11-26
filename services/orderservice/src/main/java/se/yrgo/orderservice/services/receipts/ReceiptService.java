@@ -34,7 +34,7 @@ public class ReceiptService {
 
         Receipt receipt = new Receipt(
                 order,
-                order.getCustomerId(),
+                order.getUserId(),
                 order.getTotal());
 
         for (OrderLine line : order.getLines()) {
@@ -56,7 +56,7 @@ public class ReceiptService {
                 .orElseThrow(() -> new ReceiptNotFoundException("No receipt for order " + orderNumber));
     }
 
-    public List<Receipt> getCustomerReceipts(Long customerId) {
-        return receiptRepository.findByCustomerId(customerId);
+    public List<Receipt> getReceiptsByUser(Long userId) {
+        return receiptRepository.findByUserId(userId);
     }
 }

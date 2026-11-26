@@ -26,8 +26,8 @@ public class OrderService {
     }
 
     @Transactional
-    public Order createOrder(Long customerId, List<OrderLineRequest> lines) {
-        Order order = new Order(customerId);
+    public Order createOrder(Long userId, List<OrderLineRequest> lines) {
+        Order order = new Order(userId);
         for (OrderLineRequest line : lines) {
             ProductInfo p = productClient.getProduct(line.productId());
             order.addLine(new OrderLine(p.productId(), p.productName(), line.quantity(), p.price()));
@@ -61,7 +61,7 @@ public class OrderService {
                 .orElseThrow(() -> new OrderNotFoundException("Order " + orderNumber + " not found"));
     }
 
-    public List<Order> getOrdersByCustomer(Long customerId) {
-        return orderRepository.findByCustomerId(customerId);
+    public List<Order> getOrdersByUser(Long userId) {
+        return orderRepository.findByUserId(userId);
     }
 }

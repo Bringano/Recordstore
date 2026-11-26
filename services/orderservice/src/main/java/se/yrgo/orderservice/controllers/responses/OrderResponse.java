@@ -10,7 +10,7 @@ import se.yrgo.orderservice.domain.orders.OrderStatus;
 public record OrderResponse(
                 Long id,
                 String orderNumber,
-                Long customerId,
+                Long userId,
                 Instant createdAt,
                 OrderStatus status,
                 List<OrderLineResponse> lines,
@@ -23,7 +23,7 @@ public record OrderResponse(
                 return new OrderResponse(
                                 order.getId(),
                                 order.getOrderNumber(),
-                                order.getCustomerId(),
+                                order.getUserId(),
                                 order.getCreatedAt(),
                                 order.getStatus(),
                                 lines,

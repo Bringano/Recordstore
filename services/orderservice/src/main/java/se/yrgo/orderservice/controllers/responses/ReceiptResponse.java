@@ -11,7 +11,7 @@ public record ReceiptResponse(
                 String receiptNumber,
                 String orderNumber,
                 Instant issuedAt,
-                Long customerId,
+                Long userId,
                 BigDecimal total,
                 List<ReceiptLineResponse> lines) {
 
@@ -24,7 +24,7 @@ public record ReceiptResponse(
                                 receipt.getReceiptNumber(),
                                 receipt.getOrder().getOrderNumber(),
                                 receipt.getIssuedAt(),
-                                receipt.getCustomerId(),
+                                receipt.getUserId(),
                                 receipt.getTotal(),
                                 lines);
         }

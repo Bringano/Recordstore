@@ -9,7 +9,7 @@ import se.yrgo.orderservice.domain.orders.*;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     Optional<Order> findByOrderNumber(String orderNumber);
 
-    List<Order> findByCustomerId(Long customerId);
+    List<Order> findByUserId(Long userId);
 
     List<Order> findByStatus(OrderStatus status);
 }

@@ -1,5 +1,15 @@
 package se.yrgo.orderservice.controllers;
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,15 +17,6 @@ import se.yrgo.orderservice.controllers.requests.CreateOrderRequest;
 import se.yrgo.orderservice.controllers.responses.OrderResponse;
 import se.yrgo.orderservice.domain.orders.Order;
 import se.yrgo.orderservice.services.orders.OrderService;
-
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -27,8 +28,11 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderResponse> createOrder(@RequestBody CreateOrderRequest request) {
-        Order order = service.createOrder(request.customerId(), request.lines());
+    public ResponseEntity<OrderResponse> createOrder(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestBody CreateOrderRequest request) {
+        Long userId = Long.valueOf(jwt.getSubject());
+        Order order = service.createOrder(userId, request.lines());
         return ResponseEntity.status(HttpStatus.CREATED).body(OrderResponse.from(order));
     }
 
@@ -44,19 +48,19 @@ public class OrderController {
         return ResponseEntity.ok(OrderResponse.from(order));
     }
 
+    @GetMapping("/my")
+    public ResponseEntity<List<OrderResponse>> getMyOrders(@AuthenticationPrincipal Jwt jwt) {
+        Long userId = Long.valueOf(jwt.getSubject());
+        List<OrderResponse> orders = service.getOrdersByUser(userId)
+                .stream()
+                .map(OrderResponse::from)
+                .toList();
+        return ResponseEntity.ok(orders);
+    }
+
     @GetMapping("/{orderNumber}")
     public ResponseEntity<OrderResponse> getByOrderNumber(@PathVariable String orderNumber) {
         Order order = service.getByOrderNumber(orderNumber);
         return ResponseEntity.ok(OrderResponse.from(order));
-    }
-
-    @GetMapping("/customer/{customerId}")
-    public ResponseEntity<List<OrderResponse>> getCustomerOrders(@PathVariable Long customerId) {
-        List<OrderResponse> orders = service.getOrdersByCustomer(customerId)
-                .stream()
-                .map(OrderResponse::from)
-                .toList();
-
-        return ResponseEntity.ok(orders);
     }
 }
