@@ -2,6 +2,8 @@ package se.yrgo.userservice.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import se.yrgo.userservice.domain.User;
 import se.yrgo.userservice.dto.UpdateUsernameDto;
@@ -67,5 +69,28 @@ public class UserController {
         }
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<UserDto> getMe(@AuthenticationPrincipal Jwt jwt) {
+        try {
+            Long userId = Long.valueOf(jwt.getSubject());
+            User user = userService.getUserById(userId);
+            return ResponseEntity.ok(UserDto.fromUser(user));
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
+    @PutMapping("/me")
+    public ResponseEntity<?> updateMyUsername(@AuthenticationPrincipal Jwt jwt,
+                                              @RequestBody UpdateUsernameDto updateUsernameDto) {
+        try {
+            Long userId = Long.valueOf(jwt.getSubject());
+            User user = userService.updateUsername(userId, updateUsernameDto.username());
+            return ResponseEntity.ok(UserDto.fromUser(user));
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (UserAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
+    }
 }
