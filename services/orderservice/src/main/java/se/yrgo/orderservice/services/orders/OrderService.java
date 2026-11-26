@@ -56,6 +56,10 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+
     public Order getByOrderNumber(String orderNumber) {
         return orderRepository.findByOrderNumber(orderNumber)
                 .orElseThrow(() -> new OrderNotFoundException("Order " + orderNumber + " not found"));

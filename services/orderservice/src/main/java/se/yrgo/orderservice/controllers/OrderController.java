@@ -48,6 +48,15 @@ public class OrderController {
         return ResponseEntity.ok(OrderResponse.from(order));
     }
 
+    @GetMapping
+    public ResponseEntity<List<OrderResponse>> getAllOrders() {
+        List<OrderResponse> orders = service.getAllOrders()
+                .stream()
+                .map(OrderResponse::from)
+                .toList();
+        return ResponseEntity.ok(orders);
+    }
+
     @GetMapping("/my")
     public ResponseEntity<List<OrderResponse>> getMyOrders(@AuthenticationPrincipal Jwt jwt) {
         Long userId = Long.valueOf(jwt.getSubject());
