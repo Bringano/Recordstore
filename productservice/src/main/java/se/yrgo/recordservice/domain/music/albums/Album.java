@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import se.yrgo.recordservice.domain.music.product.MusicProduct;
 import se.yrgo.recordservice.domain.music.artists.Artist;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Album {
@@ -15,13 +13,13 @@ public class Album {
     private Long id;
     private String name;
     @ManyToMany
-    private List<Artist> artists = new ArrayList<>();
+    private Set<Artist> artists = new HashSet<>();
     private Date yearRecorded;
     @OneToMany(mappedBy = "music_product")
     private MusicProduct musicProduct;
 
-    @Enumerated(EnumType.STRING)
-    private Genre genre;
+    @ManyToMany
+    private Set<Genre> genres = new HashSet<>();
     private String info;
 
     public Album() {
@@ -39,11 +37,11 @@ public class Album {
         this.name = name;
     }
 
-    public List<Artist> getArtists() {
+    public Set<Artist> getArtists() {
         return artists;
     }
 
-    public void setArtists(List<Artist> artists) {
+    public void setArtists(Set<Artist> artists) {
         this.artists = artists;
     }
 
@@ -55,20 +53,20 @@ public class Album {
         this.yearRecorded = yearRecorded;
     }
 
-    public MusicProduct getPhysicalCopy() {
+    public MusicProduct getMusicProduct() {
         return musicProduct;
     }
 
-    public void setPhysicalCopy(MusicProduct musicProduct) {
+    public void setMusicProduct(MusicProduct musicProduct) {
         this.musicProduct = musicProduct;
     }
 
-    public Genre getGenre() {
-        return genre;
+    public Set<Genre> getGenres() {
+        return genres;
     }
 
-    public void setGenre(Genre genre) {
-        this.genre = genre;
+    public void setGenres(Set<Genre> genres) {
+        this.genres = genres;
     }
 
     public String getInfo() {

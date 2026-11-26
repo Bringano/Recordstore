@@ -1,166 +1,17 @@
 package se.yrgo.recordservice.domain.music.albums;
 
-public enum Genre {
-    // Rock
-    ROCK,
-    CLASSIC_ROCK,
-    HARD_ROCK,
-    PROGRESSIVE_ROCK,
-    PSYCHEDELIC_ROCK,
-    GARAGE_ROCK,
-    ALTERNATIVE_ROCK,
-    INDIE_ROCK,
-    POST_ROCK,
-    PUNK,
-    POST_PUNK,
-    NEW_WAVE,
-    GRUNGE,
-    SHOEGAZE,
-    ROCKABILLY,
+import jakarta.persistence.*;
 
-    // Metal
-    HEAVY_METAL,
-    THRASH_METAL,
-    DEATH_METAL,
-    BLACK_METAL,
-    DOOM_METAL,
-    POWER_METAL,
-    PROGRESSIVE_METAL,
-    SYMPHONIC_METAL,
-    METALCORE,
-    NU_METAL,
+@Entity
+public class Genre {
 
-    // Pop
-    POP,
-    INDIE_POP,
-    SYNTH_POP,
-    DREAM_POP,
-    ART_POP,
-    ELECTROPOP,
-    K_POP,
-    J_POP,
-    DANCE_POP,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    // Jazz
-    JAZZ,
-    SWING,
-    BEBOP,
-    HARD_BOP,
-    COOL_JAZZ,
-    FREE_JAZZ,
-    FUSION,
-    SMOOTH_JAZZ,
-    LATIN_JAZZ,
-    VOCAL_JAZZ,
+    @Column(unique = true, nullable = false)
+    private String name;
 
-    // Blues
-    BLUES,
-    DELTA_BLUES,
-    CHICAGO_BLUES,
-    ELECTRIC_BLUES,
-    BLUES_ROCK,
-
-    // Soul, Funk & R&B
-    SOUL,
-    NEO_SOUL,
-    FUNK,
-    DISCO,
-    RNB,
-    CONTEMPORARY_RNB,
-    MOTOWN,
-    GOSPEL,
-
-    // Hip-hop
-    HIP_HOP,
-    OLD_SCHOOL_HIP_HOP,
-    BOOM_BAP,
-    GANGSTA_RAP,
-    TRAP,
-    CONSCIOUS_HIP_HOP,
-    EXPERIMENTAL_HIP_HOP,
-    GRIME,
-    DRILL,
-
-    // Elektronisk musik
-    ELECTRONIC,
-    HOUSE,
-    DEEP_HOUSE,
-    TECHNO,
-    MINIMAL_TECHNO,
-    TRANCE,
-    AMBIENT,
-    IDM,
-    DRUM_AND_BASS,
-    JUNGLE,
-    DUBSTEP,
-    BREAKBEAT,
-    TRIP_HOP,
-    DOWNTEMPO,
-    INDUSTRIAL,
-    SYNTHWAVE,
-    ELECTRO,
-
-    // Folk, Country & Americana
-    FOLK,
-    CONTEMPORARY_FOLK,
-    FOLK_ROCK,
-    COUNTRY,
-    ALT_COUNTRY,
-    BLUEGRASS,
-    AMERICANA,
-    SINGER_SONGWRITER,
-    CELTIC_FOLK,
-
-    // Reggae & Ska
-    REGGAE,
-    ROOTS_REGGAE,
-    DUB,
-    DANCEHALL,
-    SKA,
-    ROCKSTEADY,
-
-    // Latin & världsmusik
-    LATIN,
-    SALSA,
-    SAMBA,
-    BOSSA_NOVA,
-    TANGO,
-    REGGAETON,
-    AFROBEAT,
-    AFROBEATS,
-    HIGHLIFE,
-    CUMBIA,
-    FLAMENCO,
-    WORLD_MUSIC,
-
-    // Klassisk musik
-    CLASSICAL,
-    BAROQUE,
-    ROMANTIC,
-    CONTEMPORARY_CLASSICAL,
-    OPERA,
-    CHAMBER_MUSIC,
-    ORCHESTRAL,
-    CHORAL,
-    MINIMALISM,
-
-    // Experimentell musik
-    EXPERIMENTAL,
-    AVANT_GARDE,
-    NOISE,
-    DRONE,
-    MUSIQUE_CONCRETE,
-    FIELD_RECORDING,
-
-    // Övrigt
-    SOUNDTRACK,
-    FILM_SCORE,
-    MUSICAL,
-    EASY_LISTENING,
-    LOUNGE,
-    NEW_AGE,
-    CHILDRENS_MUSIC,
-    COMEDY,
-    SPOKEN_WORD,
-    OTHER
+    @Enumerated(EnumType.STRING)
+    private Department department;
 }
