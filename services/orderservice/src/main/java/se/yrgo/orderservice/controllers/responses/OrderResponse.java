@@ -15,6 +15,7 @@ public record OrderResponse(
                 OrderStatus status,
                 List<OrderLineResponse> lines,
                 BigDecimal total) {
+
         public static OrderResponse from(Order order) {
                 List<OrderLineResponse> lines = order.getLines().stream()
                                 .map(OrderLineResponse::from)
