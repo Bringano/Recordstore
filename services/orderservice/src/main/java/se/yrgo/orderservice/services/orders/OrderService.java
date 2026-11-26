@@ -35,18 +35,21 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    @Transactional
     public Order addLine(String orderNumber, OrderLine line) {
         Order order = getByOrderNumber(orderNumber);
         order.addLine(line);
         return orderRepository.save(order);
     }
 
+    @Transactional
     public Order confirm(String orderNumber) {
         Order order = getByOrderNumber(orderNumber);
         order.confirm();
         return orderRepository.save(order);
     }
 
+    @Transactional
     public Order cancel(String orderNumber) {
         Order order = getByOrderNumber(orderNumber);
         order.cancel();
