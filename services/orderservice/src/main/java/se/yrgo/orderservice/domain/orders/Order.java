@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import se.yrgo.orderservice.util.*;
 
 @Entity
 @Table(name = "orders")
@@ -24,7 +25,7 @@ public class Order {
     private Long id;
 
     @Column(nullable = false, unique = true, updatable = false)
-    private String orderNumber = UUID.randomUUID().toString();
+    private String orderNumber = NumberGenerator.orderNumber();
 
     @Column(nullable = false, updatable = false)
     private Long customerId;
@@ -64,7 +65,17 @@ public class Order {
         status = OrderStatus.CONFIRMED;
     }
 
+    public void complete() {
+        if (status != OrderStatus.CONFIRMED) {
+            throw new IllegalStateException("Only a CONFIRMED order can be completed");
+        }
+        status = OrderStatus.COMPLETED;
+    }
+
     public void cancel() {
+        if (status == OrderStatus.COMPLETED) {
+            throw new IllegalStateException("Cannot cancel a completed order");
+        }
         if (status == OrderStatus.CANCELLED) {
             throw new IllegalStateException("Order already cancelled");
         }
