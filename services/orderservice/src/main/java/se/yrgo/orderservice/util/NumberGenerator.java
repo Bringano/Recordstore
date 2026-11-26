@@ -31,6 +31,17 @@ public final class NumberGenerator {
     }
 
     /**
+     * Generates a new purchase order number.
+     * <p>
+     * Example: {@code PO-20261126-A1B2C3D4}
+     *
+     * @return a new purchase order number prefixed with {@code PO-}
+     */
+    public static String purchaseOrderNumber() {
+        return "PO-" + DATE.format(LocalDate.now(ZoneId.systemDefault())) + "-" + randomSuffix();
+    }
+
+    /**
      * Generates a new receipt number.
      * <p>
      * Example: {@code RCP-20261126-A1B2C3D4}
