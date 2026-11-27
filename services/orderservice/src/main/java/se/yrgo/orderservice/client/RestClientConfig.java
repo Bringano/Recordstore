@@ -1,14 +1,15 @@
 package se.yrgo.orderservice.client;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
 @Configuration
+@EnableConfigurationProperties(ProductServiceProperties.class)
 public class RestClientConfig {
     @Bean
-    RestClient productRestClient(@Value("${productservice.base-url}") String baseUrl) {
-        return RestClient.builder().baseUrl(baseUrl).build();
+    RestClient productRestClient(ProductServiceProperties properties) {
+        return RestClient.builder().baseUrl(properties.getBaseUrl()).build();
     }
 }
