@@ -6,20 +6,30 @@ import se.yrgo.recordservice.domain.music.Label;
 import se.yrgo.recordservice.domain.Product;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class MusicProduct extends Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne
     @JoinColumn(name = "album_id")
     private Album album;
+
     @Enumerated(EnumType.STRING)
     private Packaging packaging;
+
     @Enumerated(EnumType.STRING)
     private PackagingProperty packagingProperty;
     private Date releaseDate;
     private String pressing;
+
     @ManyToMany
-    private Label label;
+    private Set<Label> labels  = new HashSet<>();
 
     public MusicProduct() {
     }
@@ -64,11 +74,11 @@ public class MusicProduct extends Product {
         this.pressing = pressing;
     }
 
-    public Label getLabel() {
-        return label;
+    public Set<Label> getLabels() {
+        return labels;
     }
 
-    public void setLabel(Label label) {
-        this.label = label;
+    public void setLabels(Set<Label> labels) {
+        this.labels = labels;
     }
 }

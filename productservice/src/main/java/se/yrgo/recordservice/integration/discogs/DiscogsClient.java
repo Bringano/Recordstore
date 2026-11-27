@@ -13,12 +13,21 @@ public class DiscogsClient {
 
     public DiscogsClient(
             RestClient.Builder builder,
-            @Value("${discogs.token}") String token) {
+            @Value("${discogs.token}") String token,
+            @Value("${discogs.base-url}") String baseUrl,
+            @Value("${discogs.user-agent}") String userAgent) {
+
+        if (token.isBlank()) {
+            throw new IllegalStateException(
+              "Missing Discogs token"
+            );
+        }
+
         this.restClient = builder
-                .baseUrl("https://api.discogs.com")
+                .baseUrl(baseUrl)
                 .defaultHeader(
                         HttpHeaders.USER_AGENT,
-                        "RecordService/1.0"
+                        userAgent
                 )
                 .defaultHeader(
                         HttpHeaders.AUTHORIZATION,
@@ -28,7 +37,15 @@ public class DiscogsClient {
     }
 
     public DiscogsSearchResponse searchRelease(String query) {
+
         return restClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/database/search")
+                        .queryParam("q", "{query}")
+                        .queryParam("type", "release")
+                        .build(query))
+                .retrieve()
+                .body(DiscogsSearchResponse.class);
     }
 
     public DiscogsReleaseDto getRelease(Long releaseId) {
@@ -38,4 +55,8 @@ public class DiscogsClient {
                 .retrieve()
                 .body(DiscogsReleaseDto.class);
     }
+
+    //getArtist()
+    //getLabel()
+    //getMasterRelease()
 }

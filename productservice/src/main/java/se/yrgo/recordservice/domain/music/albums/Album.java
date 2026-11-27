@@ -15,8 +15,8 @@ public class Album {
     @ManyToMany
     private Set<Artist> artists = new HashSet<>();
     private Date yearRecorded;
-    @OneToMany(mappedBy = "music_product")
-    private MusicProduct musicProduct;
+    @OneToMany(mappedBy = "album")
+    private Set<MusicProduct> musicProducts = new HashSet<>();
 
     @ManyToMany
     private Set<Genre> genres = new HashSet<>();
@@ -53,12 +53,12 @@ public class Album {
         this.yearRecorded = yearRecorded;
     }
 
-    public MusicProduct getMusicProduct() {
-        return musicProduct;
+    public Set<MusicProduct> getMusicProducts() {
+        return musicProducts;
     }
 
-    public void setMusicProduct(MusicProduct musicProduct) {
-        this.musicProduct = musicProduct;
+    public void setMusicProducts(Set<MusicProduct> musicProducts) {
+        this.musicProducts = musicProducts;
     }
 
     public Set<Genre> getGenres() {
