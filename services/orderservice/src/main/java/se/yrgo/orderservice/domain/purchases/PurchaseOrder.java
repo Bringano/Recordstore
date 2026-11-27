@@ -101,6 +101,10 @@ public class PurchaseOrder {
         return status;
     }
 
+    public Instant getArrivedAt() {
+        return arrivedAt;
+    }
+
     public List<PurchaseOrderLine> getLines() {
         return lines;
     }
